@@ -1,13 +1,13 @@
-import TIL from '../domains/TIL';
-import TILItem from '../domains/TILItem';
-import TILTag from '../domains/TILTag';
-import TILParseError from '../errors/TILParseError';
-import TILCommentToken from './tokens/TILCommentToken';
-import TILDateToken from './tokens/TILDateToken';
-import TILItemToken from './tokens/TILItemToken';
-import TILMagicToken from './tokens/TILMagicToken';
-import TILTagToken from './tokens/TILTagToken';
-import Token from './tokens/Token';
+import TIL from '../../domains/TIL';
+import TILItem from '../../domains/TILItem';
+import TILTag from '../../domains/TILTag';
+import TILParseError from '../../errors/TILParseError';
+import TILCommentToken from '../tokens/TILCommentToken';
+import TILDateToken from '../tokens/TILDateToken';
+import TILItemToken from '../tokens/TILItemToken';
+import TILMagicToken from '../tokens/TILMagicToken';
+import TILTagToken from '../tokens/TILTagToken';
+import Token from '../tokens/Token';
 
 export default class TILParseResult {
   constructor(public readonly text: string, public readonly tokens: Token[]) {}

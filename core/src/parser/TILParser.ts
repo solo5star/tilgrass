@@ -1,5 +1,5 @@
 /* eslint-disable class-methods-use-this */
-import TILParseResult from './TILParseResult';
+import TILParseResult from './result/TILParseResult';
 import TILCommentToken from './tokens/TILCommentToken';
 import TILDateToken from './tokens/TILDateToken';
 import TILItemToken from './tokens/TILItemToken';
