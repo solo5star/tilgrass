@@ -1,6 +1,9 @@
 {
     "folders": [
         {
+            "path": "."
+        },
+        {
             "path": "core"
         },
         {
@@ -46,6 +49,10 @@
                 "source.fixAll": true,
                 "source.organizeImports": true
             }
-        }
+        },
+
+        "jest.disabledWorkspaceFolders": [
+            "tilgrass" // ignore workspace root
+        ]
     }
 }
