@@ -1,0 +1,51 @@
+{
+    "folders": [
+        {
+            "path": "core"
+        },
+        {
+            "path": "backend"
+        }
+    ],
+    "extensions": {
+        "recommendations": [
+            "yzhang.markdown-all-in-one"
+        ]
+    },
+    "settings": {
+        // editor & files configuraitons
+        "editor.rulers": [100],
+        "editor.tabSize": 2,
+        "search.exclude": {
+            "**/node_modules": true
+        },
+        "files.exclude": {
+            "**/node_modules": true
+        },
+
+        // eslint configurations
+        "eslint.alwaysShowStatus": true,
+        "eslint.lintTask.enable": true,
+        "eslint.packageManager": "pnpm",
+
+        "[markdown]": {
+            "editor.formatOnSave": true
+        },
+
+        "[typescript]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode",
+            "editor.codeActionsOnSave": {
+                "source.fixAll": true,
+                "source.organizeImports": true
+            }
+        },
+
+        "[typescriptreact]": {
+            "editor.defaultFormatter": "esbenp.prettier-vscode",
+            "editor.codeActionsOnSave": {
+                "source.fixAll": true,
+                "source.organizeImports": true
+            }
+        }
+    }
+}
