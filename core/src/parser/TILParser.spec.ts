@@ -123,15 +123,31 @@ describe('TILParser', () => {
     (inputLines, expectedTokenClasses, expectedTokenTexts, expectedTIL) => {
       const input = inputLines.join('\n');
       const parser = new TILParser();
-      const parseResult = parser.parse(input);
+      const { til, tokens } = parser.parse(input);
 
-      expect(
-        parseResult?.tokens.map((token) => token.constructor.name),
-      ).toEqual(expectedTokenClasses.map((tokenClass) => tokenClass.name));
-      expect(
-        parseResult?.tokens.map((token) => input.slice(token.start, token.end)),
-      ).toEqual(expectedTokenTexts);
-      expect(parseResult?.build()).toEqual(expectedTIL);
+      expect(tokens.map((token) => token.constructor.name))
+        .toEqual(expectedTokenClasses.map((tokenClass) => tokenClass.name));
+      expect(tokens.map((token) => input.slice(token.start, token.end)))
+        .toEqual(expectedTokenTexts);
+      expect(til).toEqual(expectedTIL);
     },
   );
+
+  it('첫 번째 토큰이 Magic이 아닐 때 Alert가 발생하는지', () => {
+    const parser = new TILParser();
+    const tokens = [new TILCommentToken(0, 4, 'TEST')];
+    const { til, alerts } = parser.build(tokens);
+
+    expect(til).toBeNull();
+    expect(alerts[0]?.severity).toBe('error');
+  });
+
+  it('두 번째 토큰이 날짜가 아닐 때 Alert가 발생는지', () => {
+    const parser = new TILParser();
+    const tokens = [new TILMagicToken(0, 3), new TILTagToken(3, 10, ['nextjs'])];
+    const { til, alerts } = parser.build(tokens);
+
+    expect(til).toBeNull();
+    expect(alerts[0]?.severity).toBe('error');
+  });
 });

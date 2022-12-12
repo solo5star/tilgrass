@@ -1,4 +1,10 @@
 /* eslint-disable class-methods-use-this */
+import TIL from '../domains/TIL';
+import TILItem from '../domains/TILItem';
+import TILTag from '../domains/TILTag';
+import TILParseError from '../errors/TILParseError';
+import Alert from './result/Alert';
+import TILBuildResult from './result/TILBuildResult';
 import TILParseResult from './result/TILParseResult';
 import TILCommentToken from './tokens/TILCommentToken';
 import TILDateToken from './tokens/TILDateToken';
@@ -8,7 +14,7 @@ import TILTagToken from './tokens/TILTagToken';
 import Token from './tokens/Token';
 
 export default class TILParser {
-  parse(text: string): TILParseResult | null {
+  parse(text: string): TILParseResult {
     const tokens: Token[] = [];
 
     let index = 0;
@@ -35,7 +41,7 @@ export default class TILParser {
       if (tokens.length === 1) {
         const token = TILDateToken.tryParse(text, index);
         if (token === null) {
-          return null;
+          break; // cannot continue, force quit
         }
         tokens.push(token);
         index = token.end;
@@ -58,6 +64,55 @@ export default class TILParser {
       }
     }
 
-    return new TILParseResult(text, tokens);
+    const { til, alerts } = this.build(tokens);
+    return new TILParseResult(til, text, tokens, alerts);
+  }
+
+  build(tokens: Token[]): TILBuildResult {
+    const [firstToken, secondToken] = tokens;
+    if (!(firstToken instanceof TILMagicToken)) {
+      return new TILBuildResult(
+        null,
+        [new Alert(firstToken.start ?? 0, firstToken.start ?? 0, 'error', 'TIL로 시작해야 합니다.')],
+      );
+    }
+
+    if (!(secondToken instanceof TILDateToken)) {
+      return new TILBuildResult(
+        null,
+        [new Alert(firstToken.end, firstToken.end, 'error', 'TIL 뒤에는 날짜를 작성해야 합니다.')],
+      );
+    }
+    const { date } = secondToken;
+
+    const items = tokens
+      .filter((token): token is TILItemToken => token instanceof TILItemToken)
+      .map((token) => new TILItem(token.title, token.content));
+
+    const comment = tokens
+      .filter((token): token is TILCommentToken => token instanceof TILCommentToken)
+      .map((token) => token.comment)
+      .join('\n') || null;
+
+    const tagAlerts: Alert[] = [];
+    const tags = tokens
+      .filter((token): token is TILTagToken => token instanceof TILTagToken)
+      .flatMap((token) => {
+        try {
+          return token.tags.map((tag) => new TILTag(tag));
+        } catch (error) {
+          if (!(error instanceof TILParseError)) throw error;
+
+          tagAlerts.push(new Alert(token.start, token.end, 'error', error.message));
+          return [];
+        }
+      });
+
+    if (tagAlerts.length > 0) {
+      return new TILBuildResult(null, tagAlerts);
+    }
+
+    const til = new TIL(date, items, comment, tags);
+    return new TILBuildResult(til);
   }
 }
