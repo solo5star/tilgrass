@@ -13,7 +13,7 @@ export default class TILItemToken extends Token {
   }
 
   static tryParse(text: string, index: number): TILItemToken | null {
-    const range = Token.untilLineEnd(text, index);
+    const range = Token.getRangeUntilLineEnd(text, index);
     const start = range[0];
     let end = range[1];
     const line = text.slice(start, end);
@@ -34,7 +34,7 @@ export default class TILItemToken extends Token {
     let emptyLineAppear = false;
 
     while (additionalEnd !== text.length) {
-      [additionalStart, additionalEnd] = Token.untilLineEnd(
+      [additionalStart, additionalEnd] = Token.getRangeUntilLineEnd(
         text,
         additionalEnd + 1,
       );

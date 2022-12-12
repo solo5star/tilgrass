@@ -6,7 +6,7 @@ export default class TILDateToken extends Token {
   private static readonly REGEX_DATE_SEPARATOR = /[./-]/;
 
   static tryParse(text: string, index: number): TILDateToken | null {
-    const [start, end] = Token.untilLineEnd(text, index);
+    const [start, end] = Token.getRangeUntilLineEnd(text, index);
     const line = text.slice(start, end);
 
     const date = TILDateToken.extractDateFromString(line);

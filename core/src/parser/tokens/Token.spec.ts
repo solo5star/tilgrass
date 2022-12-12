@@ -15,7 +15,7 @@ describe('Token', () => {
   ])(
     '주어진 인덱스에서 다음 newline까지 범위를 잘 반환하는지',
     (index, expected) => {
-      expect(Token.untilLineEnd(text, index)).toEqual(expected);
+      expect(Token.getRangeUntilLineEnd(text, index)).toEqual(expected);
     },
   );
 });

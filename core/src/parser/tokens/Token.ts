@@ -13,7 +13,7 @@ export default abstract class Token {
     throw new TILParseError(text, index, 'tryParse가 구현되어 있지 않습니다.');
   }
 
-  static untilLineEnd(text: string, index: number): [number, number] {
+  static getRangeUntilLineEnd(text: string, index: number): [number, number] {
     const lineEnd = text.indexOf(Token.LINE_SEPARATOR, index);
 
     if (lineEnd === -1) return [index, text.length];
