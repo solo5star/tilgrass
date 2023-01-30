@@ -56,12 +56,12 @@ describe('TILParser', () => {
     [
       [
         'TIL 2020. 3. 27.',
-        '* node 패키지 관리자에 대해서 공부',
-        '  - npm',
-        '  - yarn',
-        '  - pnpm',
+        '1. node 패키지 관리자에 대해서 공부',
+        '• npm',
+        '• yarn',
+        '• pnpm',
         '',
-        '* WSL2 설치 및 셋업',
+        '2. WSL2 설치 및 셋업',
         '  WSL2 활성화 및 몇몇 패키지 설치',
         '  > apt install -y git curl wget neofetch',
         '',
@@ -79,8 +79,8 @@ describe('TILParser', () => {
       [
         'TIL',
         '2020. 3. 27.',
-        '* node 패키지 관리자에 대해서 공부\n  - npm\n  - yarn\n  - pnpm',
-        '* WSL2 설치 및 셋업\n  WSL2 활성화 및 몇몇 패키지 설치\n  > apt install -y git curl wget neofetch',
+        '1. node 패키지 관리자에 대해서 공부\n• npm\n• yarn\n• pnpm',
+        '2. WSL2 설치 및 셋업\n  WSL2 활성화 및 몇몇 패키지 설치\n  > apt install -y git curl wget neofetch',
         '#nodejs #npm #yarn #pnpm #wsl #linux',
         '내일은 Docker에 대해 공부해보겠습니다.',
       ],
@@ -89,7 +89,7 @@ describe('TILParser', () => {
         [
           new TILItem(
             'node 패키지 관리자에 대해서 공부',
-            '  - npm\n  - yarn\n  - pnpm',
+            '• npm\n• yarn\n• pnpm',
           ),
           new TILItem(
             'WSL2 설치 및 셋업',
