@@ -1,16 +1,9 @@
 import Token from './Token';
 
 export default class TILItemToken extends Token {
-  static readonly REGEX_MARKER_ORDERED = /^\d+\./;
+  static readonly REGEX_TITLE_MARKER = /^\d+\./;
 
-  static readonly REGEX_MARKER_UNORDERED = /^[-*] /;
-
-  private static getMarkerRegex(line: string) {
-    return [
-      TILItemToken.REGEX_MARKER_ORDERED,
-      TILItemToken.REGEX_MARKER_UNORDERED,
-    ].find((regex) => regex.test(line));
-  }
+  static readonly REGEX_CONTENT_MARKER = /^[ *◦•-] /;
 
   static tryParse(text: string, index: number): TILItemToken | null {
     const range = Token.getRangeUntilLineEnd(text, index);
@@ -18,10 +11,9 @@ export default class TILItemToken extends Token {
     let end = range[1];
     const line = text.slice(start, end);
 
-    const regexMarker = TILItemToken.getMarkerRegex(line);
-    if (!regexMarker) return null;
+    if (!TILItemToken.REGEX_TITLE_MARKER.test(line)) return null;
 
-    const title = line.replace(regexMarker, '').trimStart();
+    const title = line.replace(TILItemToken.REGEX_TITLE_MARKER, '').trimStart();
 
     // no more content
     if (end === text.length) {
@@ -47,12 +39,11 @@ export default class TILItemToken extends Token {
       }
 
       // line has marker? then this should be next item
-      if (TILItemToken.getMarkerRegex(additionalLine)) {
+      if (TILItemToken.REGEX_TITLE_MARKER.test(additionalLine)) {
         break; // force content end
       }
 
-      // line has indent?
-      if (additionalLine.startsWith('  ')) {
+      if (TILItemToken.REGEX_CONTENT_MARKER.test(additionalLine)) {
         // if above line empty, add empty line
         if (emptyLineAppear) contentLines.push('');
 
