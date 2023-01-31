@@ -44,7 +44,7 @@ export default class TILParser {
           break; // cannot continue, force quit
         }
         tokens.push(token);
-        index = token.end;
+        index = Token.indexOfNextNonBlankLine(text, token.end);
         continue;
       }
 
@@ -60,8 +60,11 @@ export default class TILParser {
       );
       if (token !== null) {
         tokens.push(token);
-        index = token.end;
+        index = Token.indexOfNextNonBlankLine(text, token.end);
+        continue;
       }
+
+      // add if additional parse need
     }
 
     const { til, alerts } = this.build(tokens);
@@ -71,9 +74,10 @@ export default class TILParser {
   build(tokens: Token[]): TILBuildResult {
     const [firstToken, secondToken] = tokens;
     if (!(firstToken instanceof TILMagicToken)) {
+      const start = firstToken instanceof Token ? firstToken.start : 0;
       return new TILBuildResult(
         null,
-        [new Alert(firstToken.start ?? 0, firstToken.start ?? 0, 'error', 'TIL로 시작해야 합니다.')],
+        [new Alert(start, start, 'error', 'TIL로 시작해야 합니다.')],
       );
     }
 

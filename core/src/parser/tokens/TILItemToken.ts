@@ -6,9 +6,8 @@ export default class TILItemToken extends Token {
   static readonly REGEX_CONTENT_MARKER = /^[ *◦•-] /;
 
   static tryParse(text: string, index: number): TILItemToken | null {
-    const range = Token.getRangeUntilLineEnd(text, index);
-    const start = range[0];
-    let end = range[1];
+    const start = index;
+    let end = Token.indexUntilLineEnd(text, index);
     const line = text.slice(start, end);
 
     if (!TILItemToken.REGEX_TITLE_MARKER.test(line)) return null;
@@ -26,10 +25,10 @@ export default class TILItemToken extends Token {
     let emptyLineAppear = false;
 
     while (additionalEnd !== text.length) {
-      [additionalStart, additionalEnd] = Token.getRangeUntilLineEnd(
-        text,
+      [additionalStart, additionalEnd] = [
         additionalEnd + 1,
-      );
+        Token.indexUntilLineEnd(text, additionalEnd + 1),
+      ];
       const additionalLine = text.slice(additionalStart, additionalEnd);
 
       // line seems empty?
