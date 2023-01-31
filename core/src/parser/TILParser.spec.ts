@@ -55,7 +55,7 @@ describe('TILParser', () => {
     ],
     [
       [
-        'TIL 2020. 3. 27.',
+        'TIL 2020. 3. 27. 금',
         '1. node 패키지 관리자에 대해서 공부',
         '• npm',
         '• yarn',
@@ -108,9 +108,9 @@ describe('TILParser', () => {
       ),
     ],
     [
-      ['TIL 19/03/27', '오늘은 휴식입니다...', '내일 뵙겠습니다'],
+      ['TIL 2019/03/27', '오늘은 휴식입니다...', '내일 뵙겠습니다'],
       [TILMagicToken, TILDateToken, TILCommentToken, TILCommentToken],
-      ['TIL', '19/03/27', '오늘은 휴식입니다...', '내일 뵙겠습니다'],
+      ['TIL', '2019/03/27', '오늘은 휴식입니다...', '내일 뵙겠습니다'],
       new TIL(
         new Date('2019-03-27'),
         [],
