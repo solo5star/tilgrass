@@ -2,9 +2,15 @@
   "name": "tilgrass-core",
   "version": "0.1.0",
   "description": "",
+  "main": "dist/index.js",
+  "files": [
+    "dist/**"
+  ],
+  "types": "dist/index.d.ts",
   "scripts": {
     "lint": "eslint src/**/*.ts",
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "solo5star",
