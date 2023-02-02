@@ -17,7 +17,7 @@
     },
     "settings": {
         // editor & files configuraitons
-        "editor.rulers": [100],
+        "editor.rulers": [120],
         "editor.tabSize": 2,
         "search.exclude": {
             "**/node_modules": true
