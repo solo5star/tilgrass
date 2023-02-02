@@ -12,7 +12,7 @@ export default abstract class Token {
    * @param index 시작 인덱스
    */
   static tryParse(text: string, index: number): Token | null {
-    throw new TILParseError(text, index, 'tryParse가 구현되어 있지 않습니다.');
+    throw new TILParseError(index, 'tryParse가 구현되어 있지 않습니다.');
   }
 
   static indexUntil(text: string, index: number, searchString: string) {

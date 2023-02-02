@@ -10,4 +10,8 @@ export default class TILCommentToken extends Token {
   constructor(start: number, end: number, public readonly comment: string) {
     super(start, end);
   }
+
+  compile() {
+    return this.comment;
+  }
 }

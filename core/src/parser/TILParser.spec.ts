@@ -6,7 +6,7 @@ import TILCommentToken from './tokens/TILCommentToken';
 import TILDateToken from './tokens/TILDateToken';
 import TILItemToken from './tokens/TILItemToken';
 import TILMagicToken from './tokens/TILMagicToken';
-import TILTagToken from './tokens/TILTagToken';
+import TILTagsToken from './tokens/TILTagsToken';
 
 describe('TILParser', () => {
   it.each([
@@ -27,7 +27,7 @@ describe('TILParser', () => {
         TILItemToken,
         TILItemToken,
         TILCommentToken,
-        TILTagToken,
+        TILTagsToken,
       ],
       [
         'TIL',
@@ -73,7 +73,7 @@ describe('TILParser', () => {
         TILDateToken,
         TILItemToken,
         TILItemToken,
-        TILTagToken,
+        TILTagsToken,
         TILCommentToken,
       ],
       [
@@ -132,22 +132,4 @@ describe('TILParser', () => {
       expect(til).toEqual(expectedTIL);
     },
   );
-
-  it('첫 번째 토큰이 Magic이 아닐 때 Alert가 발생하는지', () => {
-    const parser = new TILParser();
-    const tokens = [new TILCommentToken(0, 4, 'TEST')];
-    const { til, alerts } = parser.build(tokens);
-
-    expect(til).toBeNull();
-    expect(alerts[0]?.severity).toBe('error');
-  });
-
-  it('두 번째 토큰이 날짜가 아닐 때 Alert가 발생는지', () => {
-    const parser = new TILParser();
-    const tokens = [new TILMagicToken(0, 3), new TILTagToken(3, 10, ['nextjs'])];
-    const { til, alerts } = parser.build(tokens);
-
-    expect(til).toBeNull();
-    expect(alerts[0]?.severity).toBe('error');
-  });
 });

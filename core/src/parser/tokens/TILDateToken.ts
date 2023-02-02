@@ -27,4 +27,8 @@ export default class TILDateToken extends Token {
   constructor(start: number, end: number, public readonly date: Date) {
     super(start, end);
   }
+
+  compile() {
+    return this.date;
+  }
 }

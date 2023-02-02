@@ -1,3 +1,4 @@
+import TILItem from '../../domains/TILItem';
 import Token from './Token';
 
 export default class TILItemToken extends Token {
@@ -75,5 +76,9 @@ export default class TILItemToken extends Token {
     public readonly content?: string,
   ) {
     super(start, end);
+  }
+
+  compile() {
+    return new TILItem(this.title, this.content);
   }
 }

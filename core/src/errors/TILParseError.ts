@@ -6,10 +6,6 @@ import TILError from './TILError';
 export default class TILParseError extends TILError {
   constructor(
     /**
-     * 입력으로 주어진 문자열입니다.
-     */
-    public readonly text: string,
-    /**
      * 문제가 발생한 위치입니다.
      */
     public readonly index: number,

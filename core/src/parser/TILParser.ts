@@ -1,8 +1,7 @@
 /* eslint-disable class-methods-use-this */
 import TIL from '../domains/TIL';
-import TILItem from '../domains/TILItem';
-import TILTag from '../domains/TILTag';
-import TILParseError from '../errors/TILParseError';
+import TILTokenError from '../errors/TILTokenError';
+import TILValidationError from '../errors/TILValidationError';
 import Alert from './result/Alert';
 import TILBuildResult from './result/TILBuildResult';
 import TILParseResult from './result/TILParseResult';
@@ -10,7 +9,7 @@ import TILCommentToken from './tokens/TILCommentToken';
 import TILDateToken from './tokens/TILDateToken';
 import TILItemToken from './tokens/TILItemToken';
 import TILMagicToken from './tokens/TILMagicToken';
-import TILTagToken from './tokens/TILTagToken';
+import TILTagsToken from './tokens/TILTagsToken';
 import Token from './tokens/Token';
 
 export default class TILParser {
@@ -51,7 +50,7 @@ export default class TILParser {
       // (optional) item, tag, comment can appear
       const token = [
         TILItemToken,
-        TILTagToken,
+        TILTagsToken,
         TILCommentToken,
       ].reduce<Token | null>(
         // eslint-disable-next-line @typescript-eslint/no-loop-func
@@ -67,17 +66,17 @@ export default class TILParser {
       // add if additional parse need
     }
 
-    const { til, alerts } = this.build(tokens);
+    const { til, alerts } = this.build(text, tokens);
     return new TILParseResult(til, text, tokens, alerts);
   }
 
-  build(tokens: Token[]): TILBuildResult {
+  private build(text: string, tokens: Token[]): TILBuildResult {
     const [firstToken, secondToken] = tokens;
     if (!(firstToken instanceof TILMagicToken)) {
       const start = firstToken instanceof Token ? firstToken.start : 0;
       return new TILBuildResult(
         null,
-        [new Alert(start, start, 'error', 'TIL로 시작해야 합니다.')],
+        [new Alert(start, text.length, 'error', 'TIL로 시작해야 합니다.')],
       );
     }
 
@@ -87,36 +86,47 @@ export default class TILParser {
         [new Alert(firstToken.end, firstToken.end, 'error', 'TIL 뒤에는 날짜를 작성해야 합니다.')],
       );
     }
-    const { date } = secondToken;
+    const date = secondToken.compile();
 
     const items = tokens
       .filter((token): token is TILItemToken => token instanceof TILItemToken)
-      .map((token) => new TILItem(token.title, token.content));
+      .map((token) => token.compile());
 
     const comment = tokens
       .filter((token): token is TILCommentToken => token instanceof TILCommentToken)
-      .map((token) => token.comment)
-      .join('\n') || null;
+      .map((token) => token.compile())
+      .join('\n')
+      .trim() || null;
 
-    const tagAlerts: Alert[] = [];
+    const alerts: Alert[] = [];
     const tags = tokens
-      .filter((token): token is TILTagToken => token instanceof TILTagToken)
+      .filter((token): token is TILTagsToken => token instanceof TILTagsToken)
       .flatMap((token) => {
         try {
-          return token.tags.map((tag) => new TILTag(tag));
+          return token.compile();
         } catch (error) {
-          if (!(error instanceof TILParseError)) throw error;
+          if (!(error instanceof TILTokenError)) throw error;
 
-          tagAlerts.push(new Alert(token.start, token.end, 'error', error.message));
+          alerts.push(new Alert(token.start, token.end, 'error', error.message));
           return [];
         }
       });
 
-    if (tagAlerts.length > 0) {
-      return new TILBuildResult(null, tagAlerts);
+    if (alerts.some(alert => alert.severity === 'error')) {
+      return new TILBuildResult(null, alerts);
     }
 
-    const til = new TIL(date, items, comment, tags);
-    return new TILBuildResult(til);
+    try {
+      const til = new TIL(date, items, comment, tags);
+      return new TILBuildResult(til, alerts);
+    }
+    catch (error) {
+      if (!(error instanceof TILValidationError)) throw error;
+
+      return new TILBuildResult(null, [
+        ...alerts,
+         new Alert(0, text.length, 'error', error.message),
+      ]);
+    }
   }
 }
