@@ -1,7 +1,14 @@
 version: "3"
 services:
-  db:
+  mongodb:
     image: mongo
     restart: unless-stopped
     ports:
       - 27017:27017
+    volumes:
+      - mongodb-data:/data/db
+    environment:
+      - MONGO_INITDB_DATABASE=tilgrass
+
+volumes:
+  mongodb-data:
