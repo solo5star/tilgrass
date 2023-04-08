@@ -1,0 +1,50 @@
+{
+    // editor & files configuraitons
+    "editor.rulers": [
+        120
+    ],
+    "editor.tabSize": 2,
+    "search.exclude": {
+        "**/node_modules": true
+    },
+    "files.exclude": {
+        "**/node_modules": true
+    },
+    // eslint configurations
+    "eslint.alwaysShowStatus": true,
+    "eslint.lintTask.enable": true,
+    "eslint.packageManager": "pnpm",
+    "[markdown]": {
+        "editor.formatOnSave": true
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+            "source.fixAll": true,
+            "source.organizeImports": true
+        }
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "editor.codeActionsOnSave": {
+            "source.fixAll": true,
+            "source.organizeImports": true
+        }
+    },
+    "jest.disabledWorkspaceFolders": [
+        "tilgrass" // ignore workspace root
+    ],
+    "remote.SSH.defaultForwardedPorts": [
+        {
+            "localPort": 27017,
+            "remotePort": 27017,
+            "name": "mongodb"
+        },
+        {
+            "localPort": 8000,
+            "remotePort": 8000,
+            "name": "backend"
+        }
+    ],
+    "dotenv.enableAutocloaking": false
+}
