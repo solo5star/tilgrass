@@ -10,5 +10,17 @@ services:
     environment:
       - MONGO_INITDB_DATABASE=tilgrass
 
+  tilgrass:
+    build: .
+    restart: unless-stopped
+    ports:
+      - 8000:8000
+    environment:
+      - MONGODB_URI=mongodb://mongodb/tilgrass
+      - SLACK_API_SIGNING_SECRET=${SLACK_API_SIGNING_SECRET}
+      - SLACK_API_TOKEN=${SLACK_API_TOKEN}
+      - SLACK_API_APP_TOKEN=${SLACK_API_APP_TOKEN}
+      - TIL_SLACK_PUBLISH_CHANNEL=${TIL_SLACK_PUBLISH_CHANNEL}
+
 volumes:
   mongodb-data:

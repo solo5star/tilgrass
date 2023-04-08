@@ -2,7 +2,9 @@
   "name": "tilgrass",
   "version": "0.1.0",
   "description": "Root directory of tilgrass project",
-  "scripts": {},
+  "scripts": {
+    "start": "cd backend && pnpm run start:prod"
+  },
   "author": "solo5star",
   "license": "MIT",
   "devDependencies": {
